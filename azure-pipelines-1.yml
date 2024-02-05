@@ -15,12 +15,14 @@ variables:
   containerAppName: 'lib'
   resourceGroupName: 'Zuhlke'
 
+# Dev Env
+
 stages:
-- stage: Build
+- stage: BuildDev
   displayName: Build and push stage
   jobs:
   - job: Build
-    displayName: Build
+    displayName: Build Dev
     pool:
       vmImage: $(vmImageName)
     steps:
@@ -34,9 +36,10 @@ stages:
         tags: |
           $(tag)
 
-- stage: Deploy
+
+- stage: DeployDev
   displayName: Deploy to Dev
-  dependsOn: Build
+  dependsOn: BuildDev
   condition: succeeded()
   jobs:
   - deployment: DeployApp
@@ -56,3 +59,48 @@ stages:
               scriptLocation: 'inlineScript'
               inlineScript: |
                 az containerapp update --name $(containerAppName) --resource-group $(resourceGroupName) --image $(containerRegistry)/$(imageRepository):$(tag)
+
+# Stage Env
+
+- stage: BuildStg
+  displayName: Build and push stage
+  jobs:
+  - job: Build
+    displayName: Buildstg
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: 'frontend'
+        dockerfile: $(dockerfilePath)
+        containerRegistry: 'acr-service-conn-stg'
+        tags: |
+          $(tag)
+
+- stage: DeployStg
+  displayName: Deploy to Stage
+  dependsOn: 
+    - DeployDev
+    - BuildStg
+  condition: succeeded()
+  jobs:
+  - deployment: DeployApp
+    displayName: Deploy STG Frontend
+    pool:
+      vmImage: $(vmImageName)
+    environment: 'stage'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureCLI@2
+            displayName: Update Azure Container App image
+            inputs:
+              azureSubscription: 'ARM-service-conn-stg'
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                az containerapp update --name 'frontend' --resource-group 'Zuhlke-Stage' --image 'containerzkestage.azurecr.io/frontend':$(tag)
