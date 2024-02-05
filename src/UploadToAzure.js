@@ -16,7 +16,7 @@ function UploadToAzure(props) {
 
         try {
             // Fetch the SAS token from your backend
-            const { data: { token } } = await axios.get('http://localhost:3001/sas-token');
+            const { data: { token } } = await axios.get('https://sas-backend.agreeableglacier-350650a2.australiaeast.azurecontainerapps.io:3001/sas-token');
 
             // Instantiate a new BlobServiceClient with the SAS URL
             const blobServiceClient = new BlobServiceClient(token);
