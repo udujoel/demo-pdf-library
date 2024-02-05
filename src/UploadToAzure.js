@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { BlobServiceClient } from '@azure/storage-blob';
-
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function UploadToAzure() {
     const [file, setFile] = useState(null);
@@ -36,10 +37,10 @@ function UploadToAzure() {
                 }
             });
 
-            alert('File uploaded to Azure Blob Storage.');
+            toast.success('File uploaded to Azure Blob Storage.');
         } catch (error) {
             console.error('Upload failed:', error);
-            alert('Upload failed. See console for more details.');
+            toast.error('Upload failed', error);
         }
     };
 
