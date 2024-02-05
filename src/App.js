@@ -19,14 +19,17 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <div className="container">
       <ToastContainer />
+      <br></br>
       <h1>Upload PDF</h1>
-      <div className="App">
-        <header className="nav">
+      <div>
+        <header >
           {/* Pass the success handler as a prop to UploadToAzure */}
           <UploadToAzure onUploadSuccess={handleFileUploadSuccess} />
         </header>
+        <br></br>
+        <h1>View PDF</h1>
         <div className='pdf-container'>
           {/* Show PDF Viewer if there's a PDF URL */}
           {viewPdf ? (
@@ -41,5 +44,6 @@ function App() {
     </div>
   );
 }
+
 
 export default App;

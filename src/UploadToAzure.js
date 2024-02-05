@@ -50,10 +50,10 @@ function UploadToAzure(props) {
     };
 
     return (
-        <div>
-            <input type="file" onChange={onFileChange} accept=".pdf" />
-            <button onClick={onUpload}>Upload to Azure</button>
-        </div>
+            <div className='container'>
+                <input type="file" className='form-control' onChange={onFileChange} accept=".pdf" />
+                <button onClick={onUpload} className='btn btn-success btn-lg'>Upload PDF</button>
+            </div>
     );
 }
 
