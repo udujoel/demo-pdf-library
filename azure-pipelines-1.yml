@@ -6,6 +6,7 @@ resources:
 
 variables:
   dockerRegistryServiceConnection: 'acr-service-conn'
+  ARMServiceConnection: 'ARM-service-conn'
   imageRepository: 'frontend'
   containerRegistry: 'containerzke.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
@@ -50,7 +51,7 @@ stages:
           - task: AzureCLI@2
             displayName: Update Azure Container App image
             inputs:
-              azureSubscription: $(dockerRegistryServiceConnection)
+              azureSubscription: $(ARMServiceConnection)
               scriptType: 'bash'
               scriptLocation: 'inlineScript'
               inlineScript: |
