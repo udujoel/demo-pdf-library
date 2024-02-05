@@ -5,13 +5,12 @@ resources:
 - repo: self
 
 variables:
-  dockerRegistryServiceConnection: '75d1015f-4695-4503-bc69-30e318e740d3'
+  dockerRegistryServiceConnection: 'acr-service-conn'
   imageRepository: 'frontend'
   containerRegistry: 'containerzke.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   tag: '$(Build.BuildId)'
   vmImageName: 'ubuntu-latest'
-  # Add your Azure Container App name and resource group name
   containerAppName: 'lib'
   resourceGroupName: 'Zuhlke'
 
