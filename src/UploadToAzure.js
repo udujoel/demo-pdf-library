@@ -4,7 +4,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function UploadToAzure() {
+function UploadToAzure(props) {
     const [file, setFile] = useState(null);
 
     const onFileChange = event => {
@@ -36,7 +36,12 @@ function UploadToAzure() {
                     console.log(`Uploaded ${progressEvent.loadedBytes} of ${file.size}`);
                 }
             });
-
+            // Assuming the blobs are publicly accessible, construct the URL
+            // You might need to adjust this URL based on your Azure Storage configuration
+            const uploadedFileUrl = `https://${blobServiceClient.accountName}.blob.core.windows.net/${containerClient.containerName}/${dateString}/${file.name}`;
+            console.log(uploadedFileUrl)
+            // Call the onUploadSuccess prop with the URL of the uploaded PDF
+            props.onUploadSuccess(uploadedFileUrl);
             toast.success('File uploaded to Azure Blob Storage.');
         } catch (error) {
             console.error('Upload failed:', error);

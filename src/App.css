@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  align-items: center;
+    justify-content: center;
 }
 
 .App-logo {
@@ -7,11 +9,11 @@
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
+/* @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
-}
+} */
 
 .nav {
   width: 400px;
@@ -100,15 +102,15 @@
 
 
 
-* {
+/* * {
   margin: 0;
   padding: 0;
 
-}
+} */
 
 .pdf-container {
-  width: 100%;
-  height: 800px;
+  width: 80%;
+  height: 500px;
   background-color: #e4e4e4;
   overflow-y: auto;
   display: flex;
@@ -116,9 +118,9 @@
   align-items: center;
 }
 
-.error-msg {
+/* .error-msg {
   width: 100%;
   color: rgb(192, 78, 78);
   font-size: 14px;
   font-weight: 600;
-}
+} */
