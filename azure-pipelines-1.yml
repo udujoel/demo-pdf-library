@@ -19,7 +19,7 @@ variables:
 
 stages:
 - stage: BuildDev
-  displayName: Build and push stage
+  displayName: Build-push Dev
   jobs:
   - job: Build
     displayName: Build Dev
@@ -63,7 +63,7 @@ stages:
 # Stage Env
 
 - stage: BuildStg
-  displayName: Build and push stage
+  displayName: Build-push to Stage
   jobs:
   - job: Build
     displayName: Buildstg
