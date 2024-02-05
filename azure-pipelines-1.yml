@@ -1,0 +1,58 @@
+trigger:
+- master
+
+resources:
+- repo: self
+
+variables:
+  dockerRegistryServiceConnection: '75d1015f-4695-4503-bc69-30e318e740d3'
+  imageRepository: 'frontend'
+  containerRegistry: 'containerzke.azurecr.io'
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+  tag: '$(Build.BuildId)'
+  vmImageName: 'ubuntu-latest'
+  # Add your Azure Container App name and resource group name
+  containerAppName: 'lib'
+  resourceGroupName: 'Zuhlke'
+
+stages:
+- stage: Build
+  displayName: Build and push stage
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: $(dockerfilePath)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+
+- stage: Deploy to Dev
+  displayName: Deploy to Azure Container App
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+  - deployment: DeployApp
+    displayName: Deploy Frontend
+    pool:
+      vmImage: $(vmImageName)
+    environment: 'dev'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureCLI@2
+            displayName: Update Azure Container App image
+            inputs:
+              azureSubscription: $(dockerRegistryServiceConnection)
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                az containerapp update --name $(containerAppName) --resource-group $(resourceGroupName) --image $(containerRegistry)/$(imageRepository):$(tag)
